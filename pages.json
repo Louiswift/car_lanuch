@@ -81,6 +81,13 @@
 			{
 				"navigationBarTitleText" : "重置密码"
 			}
+		},
+		{
+			"path" : "pages/myPage/AboutInfo/functionPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "功能介绍"
+			}
 		}
 	],
 	"tabBar": {

@@ -20,16 +20,11 @@
 					<text>退出登录</text>
 				</view>
 			</view>
-
-			<view class="nav-placeholder">
-				<Nav value=4 />
-			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-import Nav from '@/components/Nav.vue'; 
 import Item from '@/components/Item.vue';
 export default {
 	onTabItemTap(item) {
@@ -37,7 +32,6 @@ export default {
 	},
 	name: "MyPage",
 	components: {
-		Nav, 
 		Item 
 	},
 	data() {
@@ -134,6 +128,8 @@ export default {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
+	/* box-shadow: 5px 10px 15px #88888877; */
+	border-radius: 10px;
 }
 
 .options {
@@ -149,14 +145,12 @@ export default {
 	padding: 15px;
 	text-align: center;
 	color: red;
-	border-radius: 8px;
+	border-radius: 30px;
 	letter-spacing: 3px;
 	font-weight: 600;
+	/* box-shadow: 5px 10px 15px #88888877; */
 	background-color: #fff;
 }
 
-.nav-placeholder {
-	margin-top: 20px;
-	/* 预留 Nav 组件的空间 */
-}
+
 </style>
