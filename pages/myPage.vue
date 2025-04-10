@@ -50,11 +50,10 @@ export default {
 	},
 	methods: {
 		logout() {
-			uni.showToast({
-				title: '已退出登录',
-				icon: 'success'
-			});
-			uni.redirectTo({ url: '/' })
+			uni.showToast({ title: "已退出登录", icon: "success" });
+			setTimeout(() => {
+				uni.reLaunch({ url: "/" });
+			}, 1000);
 		},
 		goToSet() {
 			uni.navigateTo({

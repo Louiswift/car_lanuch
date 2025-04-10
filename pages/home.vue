@@ -32,13 +32,17 @@
 				</view>
 			</view>
 		</scroll-view>
+
+		<view v-if="showModal" class="modal" @click.stop>
+			<p>警报声音正在播放...</p>
+			<button @click="closeModal">关闭</button>
+		</view>
 	</view>
 </template>
 
 <script>
 import model from "./index/model.vue"
 import speechMethods from './utils/speechModule.js';
-import Nav from '@/components/Nav.vue'
 
 export default {
 	onTabItemTap(item) {
@@ -51,16 +55,28 @@ export default {
 			left1: false,
 			left2: false,
 			responseData: '',
+			showModal: false,
+			audio: null,
 		};
 	},
 	mounted() {
 		speechMethods.connectWebSocket();
+		// this.audio = new Audio(require('../static/alarm.mp3')); // 确保路径正确
 	},
 	components: {
 		model: model,
-		Nav
 	},
-	methods: {}
+	methods: {
+		handleClickOutside() {
+			this.showModal = true;
+			this.audio.play();
+		},
+		closeModal() {
+			this.showModal = false;
+			this.audio.pause();
+			this.audio.currentTime = 0; // 重置音频播放位置
+		}
+	}
 };
 </script>
 
@@ -99,11 +115,11 @@ export default {
 	background-color: #f5f5f5;
 }
 
-.content{
+.content {
 	display: grid;
 	gap: 15px;
 	padding: 20px;
-	grid-template-columns: repeat(2,1fr);
+	grid-template-columns: repeat(2, 1fr);
 }
 
 /* 卡片样式 */

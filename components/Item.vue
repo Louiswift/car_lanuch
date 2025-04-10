@@ -3,7 +3,6 @@
 		<text>{{ text }}</text>
 		<view class="right">
 			<view class="numberWrap">
-				<span :class="styleType">+86</span>
 				<text class="txt">{{ content }}</text>
 			</view>
 			<img src="../static/右边.png" class="rightIcon" alt="" srcset="" />

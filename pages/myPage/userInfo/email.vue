@@ -3,15 +3,15 @@
 		<view class="box">
 			<view class="content">
 				<view class="contentWrap">
-					<img src="../../../static/手机.png" alt="" />
-					<text>+86 {{ maskedPhoneNumber }}</text>
+					<img src="../../../static/邮箱.png" alt="" />
+					<text>{{ emailValue }}</text>
 				</view>
 				<view class="btnWrap">
 					<view class="btn bgcolorBule">
-						<text>更换手机号</text>
+						<text>更换邮箱</text>
 					</view>
 					<view class="btn bgcolorWhite">
-						<text>解绑手机号</text>
+						<text>解绑邮箱</text>
 					</view>
 				</view>
 			</view>
@@ -21,16 +21,11 @@
 
 <script>
 export default {
-	name: "phoneNumber",
+	name: "email",
 	data() {
 		return {
-			phoneNumber: "18347156218",
+			emailValue: "2392228720@qq.com",
 		}
-	},
-	computed: {
-		maskedPhoneNumber() {
-			return this.phoneNumber.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
-		},
 	},
 	methods: {
 

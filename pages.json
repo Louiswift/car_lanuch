@@ -63,9 +63,9 @@
 			}
 		},
 		{
-			"path": "pages/myPage/userInfo/phoneNumber",
+			"path": "pages/myPage/userInfo/email",
 			"style": {
-				"navigationBarTitleText": "手机号"
+				"navigationBarTitleText": "邮箱"
 			}
 		},
 		{
@@ -87,6 +87,20 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "功能介绍"
+			}
+		},
+		{
+			"path" : "pages/register",
+			"style" : 
+			{
+				"navigationBarTitleText" : "注册"
+			}
+		},
+		{
+			"path" : "pages/myPage/AboutInfo/privacy",
+			"style" : 
+			{
+				"navigationBarTitleText" : "隐私政策"
 			}
 		}
 	],

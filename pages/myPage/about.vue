@@ -6,13 +6,13 @@
 					<img src="@/static/手机.png" alt="">
 				</view>
 				<view class="info">
-					<text class="appName">苍穹车机</text>
+					<text class="appName">慧穹智慧</text>
 					<text class="version">Version 3.9.0</text>
 				</view>
 			</view>
 			<view class="itemWrap">
 				<Item text="功能介绍" :fuc="goToFunctionPage" />
-				<Item text="隐私" :fuc="aaa" />
+				<Item text="隐私政策" :fuc="goToPrivacy" />
 				<Item text="版本更新" :fuc="checkForUpdate" />
 			</view>
 		</view>
@@ -36,12 +36,14 @@ export default {
 		this.containerHeight = systemInfo.windowHeight;
 	},
 	methods: {
-		aaa() {
-			console.log(this.container)
-		},
 		goToFunctionPage() {
 			uni.navigateTo({
 				url: '/pages/myPage/AboutInfo/functionPage'
+			});
+		},
+		goToPrivacy() {
+			uni.navigateTo({
+				url: '/pages/myPage/AboutInfo/privacy'
 			});
 		},
 		checkForUpdate() {
@@ -102,7 +104,7 @@ img {
 	color: #48474F;
 }
 
-.itemWrap{
+.itemWrap {
 	display: flex;
 	flex-direction: column;
 	background-color: #fff;

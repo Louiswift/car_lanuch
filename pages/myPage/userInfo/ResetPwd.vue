@@ -4,16 +4,16 @@
 			<view class="title">修改密码</view>
 
 			<view class="step">
-				<text :class="{ active: step === 1 }">1 验证手机</text>
+				<text :class="{ active: step === 1 }">1 验证邮箱 </text>
 				<text>➡</text>
 				<text :class="{ active: step === 2 }">2 重置密码</text>
 			</view>
 
 			<view class="step1" v-if="step === 1">
-				<view class="desc">为了保证您的账号安全，请验证手机。验证成功后进行下一步操作</view>
+				<view class="desc">为了保证您的账号安全，请验证邮箱。验证成功后进行下一步操作</view>
 				<view class="phone-box">
 					<img src="@/static/手机.png" alt="">
-					<text class="phone">+86 {{maskedPhoneNumber }}</text>
+					<text class="phone">{{emailValue }}</text>
 				</view>
 				<view class="input-box">
 					<input type="number" v-model="code" placeholder="请输入验证码" maxlength="6" class="input" />
@@ -26,7 +26,7 @@
 
 			<view class="step2" v-if="step === 2">
 				<view class="input-box">
-					<input type="password" v-model="password" placeholder="请输入密码" maxlength="16" class="input" />
+					<input type="password" v-model="password" placeholder="请输入密码" maxlength="16" class="input inputcode" />
 					<u-icon name="eye" size="20" color="#ccc"></u-icon>
 				</view>
 				<view class="tips">密码长度为 8~16 位，必须包含大小写字母、数字和特殊字符</view>
@@ -40,19 +40,16 @@
 export default {
 	data() {
 		return {
-			step: 1, // 当前步骤
+			step: 1,
 			code: "",
 			password: "",
 			countdown: 0,
 			timer: null,
 			containerHeight: 0,
-			phoneNumber: "18347156218"
+			emailValue: "2392228720@qq.com"
 		};
 	},
 	computed: {
-		maskedPhoneNumber() {
-			return this.phoneNumber.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
-		},
 		isValidPassword() {
 			return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,16}$/.test(this.password);
 		},
@@ -156,6 +153,7 @@ export default {
 .input-box {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	background: #f5f5f5;
 	padding: 20rpx;
 	border-radius: 10rpx;
@@ -163,11 +161,7 @@ export default {
 }
 
 .input {
-	flex: 1;
-	background: transparent;
-	border: none;
-	font-size: 30rpx;
-	outline: none;
+	font-size: 14px;
 }
 
 .tips {
@@ -186,6 +180,12 @@ export default {
 
 .code-btn{
 	font-size: 14px;
+	width: fit-content;
+	margin: 0;
+}
+
+.inputcode{
+	flex: 1;
 }
 
 .next-btn:disabled {

@@ -5,9 +5,9 @@
 				<view class="form">
 					<view class="itemWrap">
 						<Input title="用户名" txt="蜡笔小新" type="User" disabled />
-						<Input title="旧密码" txt="请填写旧密码" type="other" v-model="oldPassword" />
-						<Input title="新密码" txt="请输入新的密码" type="other" v-model="newPassword" />
-						<Input title="确认密码" txt="请再次输入新的密码" type="other" v-model="confirmPassword" />
+						<Input title="旧密码" txt="请填写旧密码" type="password" v-model="oldPassword" />
+						<Input title="新密码" txt="请输入新的密码" type="password" v-model="newPassword" />
+						<Input title="确认密码" txt="请再次输入新的密码" type="password" v-model="confirmPassword" />
 					</view>
 					<view class="hint">
 						密码必须是8-16位英文字母、数字、字符组合(不能是纯数字)

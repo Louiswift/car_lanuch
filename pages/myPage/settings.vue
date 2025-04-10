@@ -7,8 +7,7 @@
 
 			<view class="wrap">
 				<view class="options">
-					<Item text="手机号" type="phone" :fuc="goToPhoneNumber" :content="maskedPhoneNumber" />
-					<Item text="邮箱" :fuc="a" content="tailWindCss@gmail.com" />
+					<Item text="邮箱" type="text" :fuc="goToPhoneNumber" :content="emailValue" />
 				</view>
 
 				<view class="options">
@@ -38,7 +37,7 @@ export default {
 	data() {
 		return {
 			containerHeight: 0,
-			phoneNumber: "18347156218",
+			emailValue: "2392228720@qq.com",
 		}
 	},
 	computed: {
