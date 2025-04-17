@@ -4,22 +4,22 @@
 		<scroll-view class="card-container">
 			<view class="content">
 				<view class="card" @click="toggleDoor">
-					<image src="../static/chemen.png" style="width: 40px;height: 40px;" />
+					<image src="https://launcher-car-assets.vercel.app/static/chemen.png" style="width: 40px;height: 40px;" />
 					<p>{{ doorStatus === 'open' ? '关闭车门' : '打开车门' }}</p>
 				</view>
 
 				<view class="card" @click="toggleTrunk">
-					<image src="../static/houbeixiang.png" style="width: 40px;height: 40px;" />
+					<image src="https://launcher-car-assets.vercel.app/static/houbeixiang.png" style="width: 40px;height: 40px;" />
 					<p>{{ trunkStatus === 'open' ? '关闭后备箱' : '打开后备箱' }}</p>
 				</view>
 
 				<view class="card" @click="toggleAirConditioner">
-					<image src="../static/kongtiao.png" style="width: 50px;height: 50px;" />
+					<image src="https://launcher-car-assets.vercel.app/static/kongtiao.png" style="width: 50px;height: 50px;" />
 					<p>{{ airConditionerStatus === 'on' ? '关闭空调' : '打开空调' }}</p>
 				</view>
 
 				<view class="card" @click="toggleCenterScreen">
-					<image src="../static/zhongkong.png" style="width: 35px;height: 35px;" />
+					<image src="https://launcher-car-assets.vercel.app/static/zhongkong.png" style="width: 35px;height: 35px;" />
 					<p>{{ centerScreenStatus === 'on' ? '关闭中控屏' : '打开中控屏' }}</p>
 				</view>
 			</view>

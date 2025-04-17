@@ -3,7 +3,7 @@
     <view class="popup-content">
       <text class="popup-title">注销账号</text>
       <text class="popup-text">
-        注销账号是不可恢复的操作，该账号绑定的手机号 15 天后方可重新申请注册。
+        注销账号是不可恢复的操作，该账号绑定的邮箱 15 天后方可重新申请注册。
       </text>
       
       <view class="popup-buttons">

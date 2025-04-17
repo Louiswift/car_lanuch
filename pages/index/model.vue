@@ -64,7 +64,7 @@ export default {
       container.addEventListener('mousemove', this.onMouseMove);
       //创建照明
       const rgbeLoader = new RGBELoader();
-      rgbeLoader.load("./static/zwartkops_curve_sunset_1k.hdr", function(r) {
+      rgbeLoader.load("https://launcher-car-assets.vercel.app/static/zwartkops_curve_sunset_1k.hdr", function(r) {
         r.mapping = THREE.EquirectangularReflectionMapping;
         scene.background = new THREE.Color(0xFFFFFF);
         scene.environment = r;
@@ -73,7 +73,7 @@ export default {
       let vm = this;
       //加载模型
       const loader = new GLTFLoader();
-      loader.load("./static/car2.glb", function(gltf) {
+      loader.load("https://launcher-car-assets.vercel.app/static/car2.glb", function(gltf) {
         let position = new THREE.Vector2();
         const models = gltf.scene;
         models.position.set(-2, 0, 0);

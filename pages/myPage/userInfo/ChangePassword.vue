@@ -4,7 +4,7 @@
 			<form @submit.prevent="handleSubmit" action="#" method="GET">
 				<view class="form">
 					<view class="itemWrap">
-						<Input title="用户名" txt="蜡笔小新" type="User" disabled />
+						<Input title="用户名" :txt="userInfo.username || ''" type="User" disabled />
 						<Input title="旧密码" txt="请填写旧密码" type="password" v-model="oldPassword" />
 						<Input title="新密码" txt="请输入新的密码" type="password" v-model="newPassword" />
 						<Input title="确认密码" txt="请再次输入新的密码" type="password" v-model="confirmPassword" />
@@ -25,6 +25,7 @@
 
 <script>
 import Input from '@/components/Input.vue'
+import { updatepwd } from '@/pages/utils/api.js'
 
 export default {
 	data() {
@@ -33,6 +34,7 @@ export default {
 			oldPassword: '',
 			newPassword: '',
 			confirmPassword: '',
+			userInfo: {}
 		}
 	},
 	components: {
@@ -41,6 +43,19 @@ export default {
 	onReady() {
 		const systemInfo = uni.getSystemInfoSync();
 		this.containerHeight = systemInfo.windowHeight;
+
+		uni.getStorage({
+			key: 'userInfo',
+			success: (res) => {
+				if (res.data.status === 200) {
+					this.userInfo = res.data.message;
+					console.log(this.userInfo)
+				}
+			},
+			fail: function () {
+				console.log('没有找到用户信息');
+			}
+		});
 	},
 	computed: {
 		isButtonEnabled() {
@@ -48,7 +63,7 @@ export default {
 		}
 	},
 	methods: {
-		handleSubmit() {
+		async handleSubmit() {
 			console.log("旧密码:", this.oldPassword);
 			console.log("新密码:", this.newPassword);
 			console.log("确认密码:", this.confirmPassword);
@@ -61,13 +76,34 @@ export default {
 				});
 				return;
 			}
-			console.log("密码修改成功");
+
+			if (this.oldPassword == this.newPassword) {
+				uni.showToast({
+					title: '请检查您的新密码与旧密码是否相同',
+					icon: 'none',
+					duration: 2000
+				});
+				return;
+			}
+
+			const res = await updatepwd(this.userInfo.id, this.oldPassword, this.newPassword);
+			if (res.status !== 200) {
+				uni.showToast({
+					title: '旧密码错误，请重新输入',
+					icon: 'none',
+					duration: 2000
+				});
+				return;
+			}
+
 			uni.showToast({
 				title: '密码修改成功',
 				icon: 'success',
 				duration: 2000
 			});
-			uni.redirectTo({ url: '/' })
+			setTimeout(() => {
+				uni.reLaunch({ url: "/" });
+			}, 1000);
 		}
 	}
 }
@@ -92,6 +128,7 @@ export default {
 .itemWrap {
 	display: flex;
 	flex-direction: column;
+	gap: 15px;
 }
 
 .item {
@@ -123,7 +160,7 @@ span {
 	gap: 15px;
 }
 
-.btnWrap button{
+.btnWrap button {
 	width: 70%;
 	font-size: 24rpx;
 	padding: 7px 20px;

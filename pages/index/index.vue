@@ -1,4 +1,3 @@
-<!-- 蓝色简洁登录页面 -->
 <template>
 	<view class="t-login">
 		<!-- 页面装饰图片 -->
@@ -6,7 +5,7 @@
 		<image class="img-b" src="https://zhoukaiwen.com/img/loginImg/3.png"></image>
 		<!-- 标题 -->
 		<view class="t-b">{{ title }}</view>
-		<view class="t-b2">欢迎使用，慧穹智慧小程序</view>
+		<view class="t-b2">智能车机，尽在掌握</view>
 		<form class="cl">
 			<view class="auth-wrap">
 				<view class="input-wrap">
@@ -16,52 +15,42 @@
 					</view>
 					<view class="t-a" v-if="!isPasswordMode">
 						<image src="https://zhoukaiwen.com/img/loginImg/yz.png"></image>
-						<input type="number" name="code" maxlength="6" placeholder="请输入验证码" v-model="code" />
-						<view v-if="showText" class="t-c" @tap="sendCode()">发送短信</view>
-						<view v-else class="t-c" style="background-color: #A7A7A7;">重新发送({{ second }})</view>
+						<!-- <input type="number" name="code" maxlength="6" placeholder="请输入验证码" v-model="code" />
+						<view v-if="showText" class="t-c" @tap="sendCode()">发送验证码</view>
+						<view v-else class="t-c" style="background-color: #A7A7A7;">重新发送({{ second }})</view> -->
 					</view>
 
 					<view class="t-a" v-if="isPasswordMode">
 						<image src="https://zhoukaiwen.com/img/loginImg/yz.png"></image>
-						<input type="number" name="password" maxlength="16" placeholder="请输入密码" v-model="password" />
+						<input type="password" name="password" maxlength="16" placeholder="请输入密码" v-model="password" />
 					</view>
 				</view>
 
 				<view class="auth-box">
 					<view @click="goToRegister">立即注册</view>
-					<view class="toggle-btn" @click="isPasswordModeFuc">
+					<!-- <view class="toggle-btn" @click="isPasswordModeFuc">
 						{{ isPasswordMode ? "验证码" : "密码" }}
-					</view>
+					</view> -->
 					<view @click="goToResetPwd">忘记密码</view>
 				</view>
 				<button type="submit" class="login" @click="handleLogin">登 录</button>
 			</view>
 		</form>
-		<view class="t-f"><text>————— 第三方账号登录 —————</text></view>
-		<view class="t-e cl">
-			<view class="t-g" @tap="wxLogin()">
-				<image src="https://zhoukaiwen.com/img/loginImg/wx.png"></image>
-			</view>
-			<view class="t-g" @tap="zfbLogin()">
-				<image src="https://zhoukaiwen.com/img/loginImg/qq.png"></image>
-			</view>
-		</view>
 	</view>
 </template>
 <script>
-import { sendValidationCode, login } from '@/pages/utils/api.js'
+import { getUserInfo, login } from '@/pages/utils/api.js'
+
 
 export default {
 	data() {
 		return {
-			title: '欢迎回来！',
+			title: '欢迎登录，慧穹智慧！',
 			second: 60,
 			showText: true,
-			email: '2392228720@qq.com',
-			code: '',
+			email: '',
 			password: '',
-			isPasswordMode: false, // false=验证码输入，true=密码输入
-			showPassword: false, // 密码可见状态
+			isPasswordMode: true, // false=验证码输入，true=密码输入
 		};
 	},
 	onLoad() { },
@@ -80,17 +69,6 @@ export default {
 				url: '/pages/register'
 			});
 		},
-		isPasswordModeFuc() {
-			if (this.isPasswordMode) {
-				this.isPasswordMode = false;
-				this.password = '';
-			} else {
-				this.isPasswordMode = true;
-				this.code = '';
-			}
-			console.log(this.isPasswordMode)
-		}
-		,
 		async handleLogin() {
 			var that = this;
 			if (!that.email) {
@@ -107,14 +85,6 @@ export default {
 				});
 				return;
 			}
-			if (!that.code && !this.isPasswordMode) {
-				alert("请输入验证码")
-				uni.showToast({
-					title: '请输入验证码',
-					icon: 'none'
-				});
-				return;
-			}
 			if (!that.password && this.isPasswordMode) {
 				alert("请输入密码")
 				uni.showToast({
@@ -124,26 +94,27 @@ export default {
 				return;
 			}
 
-			uni.switchTab({
-				url: '../home'
-			});
-
 			try {
-				let second = this.password || this.code;
-				const res = await login(this.email, second)
+				const res = await login(this.email, this.password)
 				console.log(this.email)
 				console.log(res)
 
 				if (res.status === 200) {
 					console.log('登录信息：', res)
-					// 保存登录信息，比如 token / cookie / 用户信息
+					const userInfo = await getUserInfo();
+					console.log('用户信息：', userInfo)
+					if (userInfo) {
+						uni.setStorageSync('userInfo', userInfo);
+					} else {
+						console.log('没有找到用户信息');
+					}
 					uni.showToast({
 						title: '登录成功！',
 						icon: 'none'
 					});
-					// uni.switchTab({
-					// 	url: '../home'
-					// });
+					uni.switchTab({
+						url: '../home'
+					});
 				} else {
 					uni.showToast({
 						title: res.msg || '登录失败',
@@ -153,50 +124,11 @@ export default {
 			} catch (err) {
 				console.error('登录异常：', err)
 				uni.showToast({
-					title: '网络错误',
+					title: "账号或密码错误",
 					icon: 'none'
 				})
 			}
 		},
-		async sendCode() {
-			var that = this;
-			var interval = setInterval(() => {
-				that.showText = false;
-				var times = that.second - 1;
-				that.second = times;
-			}, 1000);
-			setTimeout(() => {
-				clearInterval(interval);
-				that.second = 60;
-				that.showText = true;
-			}, 60000);
-
-			if (!this.email) {
-				uni.showToast({
-					title: '请输入邮箱',
-					icon: 'none'
-				});
-				return;
-			}
-
-			try {
-				await sendValidationCode(this.email);
-			} catch (err) {
-				console.error('发送失败', err);
-			}
-		},
-		wxLogin() {
-			uni.showToast({
-				title: '微信登录',
-				icon: 'none'
-			});
-		},
-		zfbLogin() {
-			uni.showToast({
-				title: 'qq登录',
-				icon: 'none'
-			});
-		}
 	}
 };
 </script>
@@ -296,6 +228,8 @@ export default {
 	color: #000;
 	padding: 230rpx 0 30rpx 0;
 	font-weight: bold;
+	position: relative;
+	z-index: 999;
 }
 
 .t-login .t-b2 {

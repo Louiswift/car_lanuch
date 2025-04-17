@@ -3,8 +3,8 @@
 		<view class="box">
 			<view class="content">
 				<view class="contentWrap">
-					<img src="../../../static/邮箱.png" alt="" />
-					<text>{{ emailValue }}</text>
+					<img src="../../../static/email.png" alt="" />
+					<text>{{ userInfo.email }}</text>
 				</view>
 				<view class="btnWrap">
 					<view class="btn bgcolorBule">
@@ -24,8 +24,22 @@ export default {
 	name: "email",
 	data() {
 		return {
-			emailValue: "2392228720@qq.com",
+			userInfo: {},
 		}
+	},
+	onReady() {
+		uni.getStorage({
+			key: 'userInfo',
+			success: (res) => {
+				if (res.data.status === 200) {
+					this.userInfo = res.data.message;
+					console.log(this.userInfo)
+				}
+			},
+			fail: function () {
+				console.log('没有找到用户信息');
+			}
+		});
 	},
 	methods: {
 

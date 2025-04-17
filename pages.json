@@ -51,12 +51,6 @@
 			}
 		},
 		{
-			"path": "pages/myPage/set",
-			"style": {
-				"navigationBarTitleText": "设置"
-			}
-		},
-		{
 			"path": "pages/myPage/about",
 			"style": {
 				"navigationBarTitleText": "关于我们"
@@ -97,10 +91,17 @@
 			}
 		},
 		{
-			"path" : "pages/myPage/AboutInfo/privacy",
+			"path" : "pages/myPage/privacy",
 			"style" : 
 			{
 				"navigationBarTitleText" : "隐私政策"
+			}
+		},
+		{
+			"path" : "pages/myPage/userInfo/userInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "个人资料"
 			}
 		}
 	],
@@ -109,32 +110,26 @@
 			{
 				"pagePath": "pages/home",
 				"text": "首页",
-				"iconPath": "static/首页.svg",
-                "selectedIconPath": "static/首页s.svg"
+				"iconPath": "https://launcher-car-assets.vercel.app/static/首页.png",
+                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/首页s.png"
 			},
 			{
 				"pagePath": "pages/service",
 				"text": "服务",
-				"iconPath": "static/服务.svg",
-                "selectedIconPath": "static/服务s.svg"
-			},
-			{
-				"pagePath": "pages/Ai",
-				"text": "AI",
-				"iconPath": "static/mic.svg",
-                "selectedIconPath": "static/mics.svg"
+				"iconPath": "https://launcher-car-assets.vercel.app/static/服务.png",
+                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/服务s.png"
 			},
 			{
 				"pagePath": "pages/shuju",
 				"text": "数据",
-				"iconPath": "static/数据.svg",
-                "selectedIconPath": "static/数据s.svg"
+				"iconPath": "https://launcher-car-assets.vercel.app/static/数据.png",
+                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/数据s.png"
 			},
 			{
 				"pagePath": "pages/myPage",
 				"text": "我的",
-				"iconPath": "static/我的.svg",
-                "selectedIconPath": "static/我的s.svg"
+				"iconPath": "https://launcher-car-assets.vercel.app/static/我的.png",
+                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/我的s.png"
 			}
 		]
 	},

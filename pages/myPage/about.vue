@@ -3,7 +3,7 @@
 		<view class="content">
 			<view class="top">
 				<view class="imgWrap">
-					<img src="@/static/手机.png" alt="">
+					<img src="@/static/phone.png" alt="">
 				</view>
 				<view class="info">
 					<text class="appName">慧穹智慧</text>
@@ -12,7 +12,6 @@
 			</view>
 			<view class="itemWrap">
 				<Item text="功能介绍" :fuc="goToFunctionPage" />
-				<Item text="隐私政策" :fuc="goToPrivacy" />
 				<Item text="版本更新" :fuc="checkForUpdate" />
 			</view>
 		</view>
@@ -39,11 +38,6 @@ export default {
 		goToFunctionPage() {
 			uni.navigateTo({
 				url: '/pages/myPage/AboutInfo/functionPage'
-			});
-		},
-		goToPrivacy() {
-			uni.navigateTo({
-				url: '/pages/myPage/AboutInfo/privacy'
 			});
 		},
 		checkForUpdate() {

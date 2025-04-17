@@ -7,11 +7,11 @@
 
 			<view class="wrap">
 				<view class="options">
-					<Item text="邮箱" type="text" :fuc="goToPhoneNumber" :content="emailValue" />
+					<Item text="个人资料" :fuc="goToUserInfo" />
+					<Item text="邮箱" type="text" :fuc="goToEmail" :content="userInfo.email" />
 				</view>
 
 				<view class="options">
-					<Item text="重置密码" :fuc="goToResetPwd" />
 					<Item text="修改密码" :fuc="goToChangePassword" />
 				</view>
 
@@ -27,6 +27,7 @@
 <script>
 import Item from 'components/Item.vue';
 import ConfirmPopup from "@/components/ConfirmPopup.vue";
+import { LogoutAc } from '@/pages/utils/api.js'
 
 export default {
 	name: "Settings",
@@ -37,7 +38,7 @@ export default {
 	data() {
 		return {
 			containerHeight: 0,
-			emailValue: "2392228720@qq.com",
+			userInfo: {},
 		}
 	},
 	computed: {
@@ -48,6 +49,19 @@ export default {
 	onReady() {
 		const systemInfo = uni.getSystemInfoSync();
 		this.containerHeight = systemInfo.windowHeight;
+
+		uni.getStorage({
+			key: 'userInfo',
+			success: (res) => {
+				if (res.data.status === 200) {
+					this.userInfo = res.data.message;
+					console.log(this.userInfo)
+				}
+			},
+			fail: function () {
+				console.log('没有找到用户信息');
+			}
+		});
 	},
 	methods: {
 		openPopup() {
@@ -57,25 +71,36 @@ export default {
 		close() {
 			this.$refs.popup.close();
 		},
-		handleLogout() {
-			uni.showToast({
-				title: "注销成功",
-				icon: "success"
+		async handleLogout() {
+			const res = await LogoutAc(this.userInfo.id)
+			if (res.status === 200) {
+				uni.showToast({
+					title: "注销成功",
+					icon: "success"
+				});
+				this.close();
+				setTimeout(() => {
+					uni.reLaunch({ url: "/" });
+				}, 1000);
+			} else {
+				uni.showToast({
+					title: res.message,
+					icon: "none"
+				});
+				this.close();
+			}
+		},
+		goToUserInfo() {
+			uni.navigateTo({
+				url: '/pages/myPage/userInfo/userInfo'
 			});
-			console.log(1)
-			this.close();
 		},
 		a() {
 			alert("跳转至修改手机页面");
 		},
-		goToResetPwd() {
+		goToEmail() {
 			uni.navigateTo({
-				url: '/pages/myPage/userInfo/ResetPwd'
-			});
-		},
-		goToPhoneNumber() {
-			uni.navigateTo({
-				url: '/pages/myPage/userInfo/phoneNumber'
+				url: '/pages/myPage/userInfo/email'
 			});
 		},
 		goToChangePassword() {

@@ -1,5 +1,5 @@
 <template>
-	<view class="settings" :style="{ height: containerHeight + 'px' }">
+	<view class="container" :style="{ height: containerHeight + 'px' }">
 		<view class="content">
 			<view class="title">修改密码</view>
 
@@ -11,23 +11,27 @@
 
 			<view class="step1" v-if="step === 1">
 				<view class="desc">为了保证您的账号安全，请验证邮箱。验证成功后进行下一步操作</view>
-				<view class="phone-box">
-					<img src="@/static/手机.png" alt="">
-					<text class="phone">{{emailValue }}</text>
-				</view>
-				<view class="input-box">
-					<input type="number" v-model="code" placeholder="请输入验证码" maxlength="6" class="input" />
-					<button class="code-btn" :disabled="countdown > 0" @click="getCode">
-						{{ countdown > 0 ? `${countdown}s` : "获取验证码" }}
-					</button>
+				<Input title="邮箱" txt="请输入邮箱" type="text" v-model="email" maxlength="17" />
+
+				<view class="focus-input">
+					<view class="input-wrapper" :class="{ active: isFocus }">
+						<span>验证码</span>
+						<view class="input-box1">
+							<input class="inputcode" type="text" placeholder="请输入验证码" maxlength="6"
+								@focus="isFocus = true" @blur="isFocus = false" v-model="code">
+							<view v-if="showText" class="t-c" @tap="sendCode()">发送验证码</view>
+							<view v-else class="t-c" style="background-color: #A7A7A7;">重新发送({{ second }})
+							</view>
+						</view>
+					</view>
 				</view>
 				<button class="next-btn" :disabled="!code" @click="nextStep">下一步</button>
 			</view>
 
 			<view class="step2" v-if="step === 2">
-				<view class="input-box">
-					<input type="password" v-model="password" placeholder="请输入密码" maxlength="16" class="input inputcode" />
-					<u-icon name="eye" size="20" color="#ccc"></u-icon>
+				<view style="margin-top:25px;">
+					<Input title="密码" txt="请输入密码" type="password" placeholder="请输入密码" v-model="password" maxlength="16"
+						minlength="8" style="width:100%;" />
 				</view>
 				<view class="tips">密码长度为 8~16 位，必须包含大小写字母、数字和特殊字符</view>
 				<button class="next-btn" :disabled="!isValidPassword" @click="submitPassword">完成</button>
@@ -37,6 +41,9 @@
 </template>
 
 <script>
+import { startreset, doreset, sendresetcode } from '@/pages/utils/api.js'
+import Input from '@/components/Input.vue'
+
 export default {
 	data() {
 		return {
@@ -46,7 +53,11 @@ export default {
 			countdown: 0,
 			timer: null,
 			containerHeight: 0,
-			emailValue: "2392228720@qq.com"
+			email: "",
+			second: 60,
+			isFocus: false,
+			showPassword: false,
+			showText: true,
 		};
 	},
 	computed: {
@@ -58,32 +69,81 @@ export default {
 		const systemInfo = uni.getSystemInfoSync();
 		this.containerHeight = systemInfo.windowHeight;
 	},
+	components: {
+		Input
+	},
 	methods: {
-		getCode() {
-			if (this.countdown > 0) return;
-			uni.showToast({ title: "验证码已发送", icon: "success" });
-			this.countdown = 60;
-			this.timer = setInterval(() => {
-				this.countdown--;
-				if (this.countdown <= 0) clearInterval(this.timer);
-			}, 1000);
+		togglePassword() {
+			this.showPassword = !this.showPassword;
 		},
-		nextStep() {
+		async nextStep() {
 			if (!this.code) {
 				uni.showToast({ title: "请输入验证码", icon: "none" });
 				return;
+			} else {
+				const res = await startreset(this.email, this.code);
+				console.log(res)
+				if (res.status === 200) {
+					uni.showToast({ title: "验证成功", icon: "success" });
+					this.step = 2; // 进入重置密码步骤
+					return
+				} else {
+					uni.showToast({ title: "验证码错误", icon: "none" });
+					return;
+				}
 			}
-			this.step = 2; // 进入重置密码步骤
 		},
-		submitPassword() {
+		async submitPassword() {
 			if (!this.isValidPassword) {
 				uni.showToast({ title: "密码格式不正确", icon: "none" });
 				return;
 			}
-			uni.showToast({ title: "密码修改成功", icon: "success" });
-			setTimeout(() => {
-				uni.reLaunch({ url: "/" });
-			}, 1000);
+
+			const res = await doreset(this.password);
+			if (res.status === 200) {
+				uni.showToast({ title: "密码修改成功", icon: "success" });
+				setTimeout(() => {
+					uni.reLaunch({ url: "/" });
+				}, 1000);
+			} else {
+				uni.showToast({ title: "密码修改失败", icon: "none" });
+				return;
+			}
+
+		},
+		async sendCode() {
+			if (!this.email) {
+				uni.showToast({
+					title: '请输入邮箱',
+					icon: 'none'
+				});
+				return;
+			}
+
+			try {
+				const sendCoderes = await sendresetcode(this.email);
+				if (sendCoderes.status === 200) {
+					uni.showToast({
+						title: sendCoderes.message,
+						icon: 'none'
+					});
+					var that = this;
+					var interval = setInterval(() => {
+						that.showText = false;
+						var times = that.second - 1;
+						that.second = times;
+					}, 1000);
+					setTimeout(() => {
+						clearInterval(interval);
+						that.second = 60;
+						that.showText = true;
+					}, 60000);
+					return;
+				}
+				console.log(sendCoderes)
+			} catch (err) {
+				console.error('发送失败', err);
+			}
 		},
 	},
 	beforeDestroy() {
@@ -107,12 +167,13 @@ export default {
 	padding: 20px;
 	overflow-y: auto;
 }
+
 .title {
 	font-size: 36rpx;
 	font-weight: bold;
 }
 
-.phone-box{
+.phone-box {
 	display: flex;
 	align-items: center;
 	gap: 5px;
@@ -123,13 +184,13 @@ export default {
 	align-items: center;
 }
 
-.step1{
+.step1 {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 }
 
-.step2{
+.step2 {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -153,7 +214,7 @@ export default {
 .input-box {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 	background: #f5f5f5;
 	padding: 20rpx;
 	border-radius: 10rpx;
@@ -178,13 +239,13 @@ export default {
 	border-radius: 10rpx;
 }
 
-.code-btn{
+.code-btn {
 	font-size: 14px;
 	width: fit-content;
 	margin: 0;
 }
 
-.inputcode{
+.inputcode {
 	flex: 1;
 }
 
@@ -193,7 +254,48 @@ export default {
 	color: #777;
 }
 
-img{
-	 width: 30px;
+img {
+	width: 30px;
+}
+
+.input-wrapper {
+	display: flex;
+	align-items: center;
+	border: 2rpx solid #ccc;
+	border-radius: 10rpx;
+	padding: 20rpx;
+	transition: border-color 0.3s;
+}
+
+span {
+	width: 180rpx;
+	font-size: 28rpx;
+}
+
+.input-box1 {
+	display: flex;
+	align-items: center;
+	background: #f5f5f5;
+	border-radius: 10rpx;
+	flex: 1;
+}
+
+.t-c {
+	background: #5677fc;
+	color: #fff;
+	font-size: 24rpx;
+	border-radius: 50rpx;
+	height: 50rpx;
+	line-height: 50rpx;
+	padding: 0 25rpx;
+}
+
+.active {
+	border-color: #007aff;
+}
+
+input {
+	flex: 1;
+	font-size: 28rpx;
 }
 </style>

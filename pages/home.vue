@@ -1,92 +1,55 @@
 <template>
 	<view style="">
 		<!-- 3D 模型区域 -->
-		<canvas style="padding: 10px; margin:0 auto;" id="container" type="webgl">
-			<model style="border-radius: 10px;" />
-		</canvas>
 
-		<!-- 卡片区域 -->
+		<!-- 车辆信息卡片区域 -->
 		<scroll-view class="card-container">
 			<view class="content">
 				<view class="card">
 					<p>当前电量</p>
 					<div class="text_my">85%</div>
-					<image style="width: 50px;height: 50px;" src="../static/dian.png" class="battery-icon"></image>
+					<image style="width: 50px;height: 50px;" src="/static/dian.png" class="battery-icon"></image>
 				</view>
 				<view class="card">
 					<p>续航里程</p>
 					<div class="text_my">355KM</div>
-					<image style="width: 50px;height: 50px;" src="../static/xvhang.png" class="car-icon"></image>
+					<image style="width: 50px;height: 50px;" src="/static/xvhang.png" class="car-icon"></image>
 				</view>
 				<view class="card">
 					<p>胎压状况</p>
 					<div class="text_my">正常</div>
 
-					<image style="width: 50px;height: 50px;" src="../static/chelun.png" class="battery-icon"></image>
+					<image style="width: 50px;height: 50px;" src="/static/chelun.png" class="battery-icon"></image>
 				</view>
 				<view class="card">
 					<p>型号</p>
 					<div class="text_my">BYD</div>
 
-					<image style="width: 50px;height: 50px;" src="../static/car.png" class="battery-icon"></image>
+					<image style="width: 50px;height: 50px;" src="/static/car.png" class="battery-icon"></image>
 				</view>
 			</view>
 		</scroll-view>
-
-		<view v-if="showModal" class="modal" @click.stop>
-			<p>警报声音正在播放...</p>
-			<button @click="closeModal">关闭</button>
-		</view>
 	</view>
 </template>
 
 <script>
-import model from "./index/model.vue"
-import speechMethods from './utils/speechModule.js';
-
 export default {
 	onTabItemTap(item) {
 		uni.$emit("tabChanged", item);
 	},
 	data() {
 		return {
-			right2: false,
-			right1: false,
-			left1: false,
-			left2: false,
-			responseData: '',
-			showModal: false,
-			audio: null,
 		};
 	},
-	mounted() {
-		speechMethods.connectWebSocket();
-		// this.audio = new Audio(require('../static/alarm.mp3')); // 确保路径正确
-	},
 	components: {
-		model: model,
 	},
 	methods: {
-		handleClickOutside() {
-			this.showModal = true;
-			this.audio.play();
-		},
-		closeModal() {
-			this.showModal = false;
-			this.audio.pause();
-			this.audio.currentTime = 0; // 重置音频播放位置
-		}
 	}
 };
 </script>
 
 <style lang="scss" scoped>
 /* 3D 模型区域的样式 */
-
-#container {
-	width: 100%;
-	height: 400px;
-}
 
 .text_my {
 	font-weight: bold;

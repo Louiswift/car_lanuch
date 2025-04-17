@@ -3,15 +3,15 @@
 		<view class="box">
 			<view class="content">
 				<view class="contentWrap">
-					<img src="../../../static/手机.png" alt="" />
-					<text>+86 183**22*6218</text>
+					<img src="../../../static/email.png" alt="" />
+					<text>2392228720@qq.com</text>
 				</view>
 				<view class="btnWrap">
 					<view class="btn bgcolorBule">
-						<text>更换手机号</text>
+						<text>更换邮箱</text>
 					</view>
 					<view class="btn bgcolorWhite">
-						<text>解绑手机号</text>
+						<text>解绑邮箱</text>
 					</view>
 				</view>
 			</view>

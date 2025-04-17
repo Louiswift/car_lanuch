@@ -7,6 +7,7 @@
 						<Input title="用户名" txt="请输入用户名" type="text" v-model="username" />
 						<Input title="密码" txt="请输入密码" type="password" v-model="password" />
 						<Input title="确认密码" txt="请再次输入密码" type="password" v-model="confirmPassword" />
+						<Input title="手机号" txt="请输入手机号" type="number" v-model="phone" maxlength="11" />
 						<Input title="邮箱" txt="请输入邮箱" type="text" v-model="email" maxlength="17" />
 
 						<view class="focus-input">
@@ -52,6 +53,7 @@ export default {
 			confirmPassword: '',
 			email: '',
 			code: '',
+			phone: '',
 			containerHeight: 0,
 			second: 60,
 			isFocus: false,
@@ -69,7 +71,7 @@ export default {
 	computed: {
 		isButtonEnabled() {
 			return this.username.trim() !== '' && this.password.trim() !== '' && this.confirmPassword.trim() !== '' &&
-				this.email.trim() !== '' && this.code.trim() !== '';
+				this.email.trim() !== '' && this.code.trim() !== '' && this.phone.trim() !== '';
 		}
 	},
 	methods: {
@@ -84,6 +86,14 @@ export default {
 				return;
 			}
 
+			if (!/^1[3-9]\d{9}$/.test(that.phone)) {
+				uni.showToast({
+					title: '请输入正确手机号',
+					icon: 'none'
+				});
+				return;
+			}
+
 			if (!/^[1-9][0-9]{4,10}@qq\.com$/.test(that.email)) {
 				uni.showToast({
 					title: '请输入正确邮箱',
@@ -91,32 +101,23 @@ export default {
 				});
 				return;
 			}
-			try {
-				const res = await register(this.username, this.password, this.email, this.code);
-				console.log(res)
-				// 根据接口返回结构处理
-				if (res.data.code === 200) {
-					uni.showToast({
-						title: "注册成功",
-						icon: "success"
-					});
-					setTimeout(() => {
-						uni.redirectTo({
-							url: '/'
-						})
-					}, 1000);
-				} else {
-					uni.showToast({
-						title: res.data.message || '注册失败',
-						icon: 'none'
-					});
-				}
-			} catch (error) {
+			const res = await register(this.username, this.password, this.email, this.phone, this.code);
+			// 根据接口返回结构处理
+			if (res.status === 200) {
 				uni.showToast({
-					title: '网络请求失败',
+					title: res.message,
+					icon: "success"
+				});
+				setTimeout(() => {
+					uni.redirectTo({
+						url: '/'
+					})
+				}, 1000);
+			} else {
+				uni.showToast({
+					title: res.data.message || '注册失败',
 					icon: 'none'
 				});
-				console.error('注册失败:', error);
 			}
 		},
 		async sendCode() {
@@ -136,7 +137,17 @@ export default {
 				return;
 			}
 
-			var that = this;
+			try {
+				const emailcoderes = await sendValidationCode(this.email);
+				if (emailcoderes.status !== 200) {
+					uni.showToast({
+						title: emailcoderes.message,
+						icon: 'none'
+					});
+					return;
+				}
+				console.log(emailcoderes)
+				var that = this;
 				var interval = setInterval(() => {
 					that.showText = false;
 					var times = that.second - 1;
@@ -147,9 +158,6 @@ export default {
 					that.second = 60;
 					that.showText = true;
 				}, 60000);
-
-			try {
-				await sendValidationCode(this.email);
 			} catch (err) {
 				console.error('发送失败', err);
 			}
@@ -192,12 +200,13 @@ export default {
 .hint {
 	color: #A7A7A7;
 	font-size: 14px;
+	margin-top: 10px;
 }
 
 .itemWrap {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 15px;
 }
 
 .itemWrap .item:last-child {
