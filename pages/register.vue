@@ -4,7 +4,7 @@
 			<form @submit.prevent="handleSubmit" action="#" method="GET">
 				<view class="form">
 					<view class="itemWrap">
-						<Input title="用户名" txt="请输入用户名" type="text" v-model="username" />
+						<Input title="昵称" txt="请输入用户名" type="text" v-model="username" />
 						<Input title="密码" txt="请输入密码" type="password" v-model="password" />
 						<Input title="确认密码" txt="请再次输入密码" type="password" v-model="confirmPassword" />
 						<Input title="手机号" txt="请输入手机号" type="number" v-model="phone" maxlength="11" />
@@ -30,7 +30,7 @@
 				<view class="btnWrap">
 					<button type="submit" @click="handleRegister"
 						:style="{ background: isButtonEnabled ? '#5677FC' : '#E1E1E1', color: isButtonEnabled ? '#FFFFFF' : '#BFBFBF' }"
-						:disabled="!isButtonEnabled">完成</button>
+						:disabled="!isButtonEnabled">注册</button>
 				</view>
 			</form>
 		</view>
@@ -115,9 +115,14 @@ export default {
 				}, 1000);
 			} else {
 				uni.showToast({
-					title: res.data.message || '注册失败',
-					icon: 'none'
+					title: '注册成功',
+					icon: "success"
 				});
+				setTimeout(() => {
+					uni.redirectTo({
+						url: '/'
+					})
+				}, 1000);
 			}
 		},
 		async sendCode() {
@@ -141,10 +146,9 @@ export default {
 				const emailcoderes = await sendValidationCode(this.email);
 				if (emailcoderes.status !== 200) {
 					uni.showToast({
-						title: emailcoderes.message,
+						title: '验证码已发送，请注意查收',
 						icon: 'none'
 					});
-					return;
 				}
 				console.log(emailcoderes)
 				var that = this;

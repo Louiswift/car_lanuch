@@ -4,33 +4,39 @@
 		<scroll-view class="card-container">
 			<view class="content">
 				<view class="card" @click="toggleDoor">
-					<image src="https://launcher-car-assets.vercel.app/static/chemen.png" style="width: 40px;height: 40px;" />
+					<image src="@/static/chemen.png"
+						style="width: 40px;height: 40px;" />
 					<p>{{ doorStatus === 'open' ? '关闭车门' : '打开车门' }}</p>
 				</view>
 
 				<view class="card" @click="toggleTrunk">
-					<image src="https://launcher-car-assets.vercel.app/static/houbeixiang.png" style="width: 40px;height: 40px;" />
+					<image src="@/static/houbeixiang.png"
+						style="width: 40px;height: 40px;" />
 					<p>{{ trunkStatus === 'open' ? '关闭后备箱' : '打开后备箱' }}</p>
 				</view>
 
 				<view class="card" @click="toggleAirConditioner">
-					<image src="https://launcher-car-assets.vercel.app/static/kongtiao.png" style="width: 50px;height: 50px;" />
+					<image src="@/static/kongtiao.png"
+						style="width: 50px;height: 50px;" />
 					<p>{{ airConditionerStatus === 'on' ? '关闭空调' : '打开空调' }}</p>
 				</view>
 
 				<view class="card" @click="toggleCenterScreen">
-					<image src="https://launcher-car-assets.vercel.app/static/zhongkong.png" style="width: 35px;height: 35px;" />
+					<image src="@/static/zhongkong.png"
+						style="width: 35px;height: 35px;" />
 					<p>{{ centerScreenStatus === 'on' ? '关闭中控屏' : '打开中控屏' }}</p>
 				</view>
 			</view>
 		</scroll-view>
 		<view @click="sendMessage(4, null)" style="width: 100%;height: 400px;"></view>
+		<door-status-dialog :visible.sync="dialogVisible" :message="dialogMessage" />
 	</view>
 </template>
 
 <script>
 import mqtt from 'mqtt';
-import Nav from '@/components/Nav.vue'; // 引入你的 Nav 组件
+import DoorStatusDialog from '@/components/DoorStatusDialog.vue'
+
 export default {
 	onTabItemTap(item) {
 		uni.$emit("tabChanged", item);
@@ -46,17 +52,24 @@ export default {
 			connectionStatus: '未连接',
 			message: '',
 			kaijiIf: true,
+			dialogVisible: false,
+			dialogMessage: '',
 		};
 	},
 	components: {
-		Nav
+		DoorStatusDialog
 	},
 	methods: {
+		showDialog(msg) {
+			this.dialogMessage = msg;
+			this.dialogVisible = true;
+		},
 		connectMQTT() {
 			const options = {
 				host: 'mqtt://broker.emqx.io',
 				port: 1883,
 			};
+			// 连接 MQTT
 			this.client = mqtt.connect("ws://broker.emqx.io:8083/mqtt");
 
 			this.client.on('connect', () => {
@@ -101,36 +114,47 @@ export default {
 			if (this.doorStatus === 'open') {
 				this.doorStatus = 'closed';
 				this.sendMessage(1, '关闭车门');
+				this.showDialog('车门已关闭');
 			} else {
 				this.doorStatus = 'open';
 				this.sendMessage(1, '打开车门');
+				this.showDialog('车门已打开');
 			}
 		},
+
 		toggleTrunk() {
 			if (this.trunkStatus === 'open') {
 				this.trunkStatus = 'closed';
 				this.sendMessage(2, '关闭后备箱');
+				this.showDialog('后备箱已关闭');
 			} else {
 				this.trunkStatus = 'open';
 				this.sendMessage(2, '打开后备箱');
+				this.showDialog('后备箱已打开');
 			}
 		},
+
 		toggleAirConditioner() {
 			if (this.airConditionerStatus === 'on') {
 				this.airConditionerStatus = 'off';
 				this.sendMessage(3, '关闭空调');
+				this.showDialog('空调已关闭');
 			} else {
 				this.airConditionerStatus = 'on';
 				this.sendMessage(3, '打开空调');
+				this.showDialog('空调已打开');
 			}
 		},
+
 		toggleCenterScreen() {
 			if (this.kaijiIf) {
 				this.kaijiIf = false;
 				this.sendMessage(0, '关机');
+				this.showDialog('中控屏已关闭');
 			} else {
 				this.kaijiIf = true;
 				this.sendMessage(0, '开机');
+				this.showDialog('中控屏已打开');
 			}
 			this.centerScreenStatus = this.kaijiIf ? 'on' : 'off';
 		},
@@ -154,11 +178,11 @@ export default {
 	background-color: #f5f5f5;
 }
 
-.content{
+.content {
 	padding: 20px;
 	display: grid;
 	gap: 15px;
-	grid-template-columns: repeat(2,1fr);
+	grid-template-columns: repeat(2, 1fr);
 }
 
 .card-row {

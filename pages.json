@@ -110,26 +110,26 @@
 			{
 				"pagePath": "pages/home",
 				"text": "首页",
-				"iconPath": "https://launcher-car-assets.vercel.app/static/首页.png",
-                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/首页s.png"
+				"iconPath": "/static/home.svg",
+                "selectedIconPath": "/static/homes.svg"
 			},
 			{
 				"pagePath": "pages/service",
 				"text": "服务",
-				"iconPath": "https://launcher-car-assets.vercel.app/static/服务.png",
-                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/服务s.png"
+				"iconPath": "/static/service.svg",
+                "selectedIconPath": "/static/services.svg"
 			},
 			{
 				"pagePath": "pages/shuju",
 				"text": "数据",
-				"iconPath": "https://launcher-car-assets.vercel.app/static/数据.png",
-                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/数据s.png"
+				"iconPath": "/static/sj.svg",
+                "selectedIconPath": "/static/sjs.svg"
 			},
 			{
 				"pagePath": "pages/myPage",
 				"text": "我的",
-				"iconPath": "https://launcher-car-assets.vercel.app/static/我的.png",
-                "selectedIconPath": "https://launcher-car-assets.vercel.app/static/我的s.png"
+				"iconPath": "/static/my.svg",
+                "selectedIconPath": "/static/mys.svg"
 			}
 		]
 	},

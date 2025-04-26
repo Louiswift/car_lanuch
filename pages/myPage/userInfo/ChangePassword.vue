@@ -77,19 +77,10 @@ export default {
 				return;
 			}
 
-			if (this.oldPassword == this.newPassword) {
-				uni.showToast({
-					title: '请检查您的新密码与旧密码是否相同',
-					icon: 'none',
-					duration: 2000
-				});
-				return;
-			}
-
 			const res = await updatepwd(this.userInfo.id, this.oldPassword, this.newPassword);
-			if (res.status !== 200) {
+			if (res.status === 400) {
 				uni.showToast({
-					title: '旧密码错误，请重新输入',
+					title: res.message,
 					icon: 'none',
 					duration: 2000
 				});

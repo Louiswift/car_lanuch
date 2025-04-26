@@ -3,10 +3,10 @@
 		<view class="content">
 			<view class="top">
 				<view class="imgWrap">
-					<img src="@/static/phone.png" alt="">
+					<img src="@/static/logoC.png" alt="">
 				</view>
 				<view class="info">
-					<text class="appName">慧穹智慧</text>
+					<text class="appName">慧穹智行伴侣</text>
 					<text class="version">Version 3.9.0</text>
 				</view>
 			</view>

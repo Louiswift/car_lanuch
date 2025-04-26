@@ -10,7 +10,7 @@
 			<view class="auth-wrap">
 				<view class="input-wrap">
 					<view class="t-a">
-						<image src="https://zhoukaiwen.com/img/loginImg/sj.png"></image>
+						<image src="../../static/loginEmail.png"></image>
 						<input type="text" name="email" placeholder="请输入邮箱" maxlength="17" v-model="email" />
 					</view>
 					<view class="t-a" v-if="!isPasswordMode">
@@ -45,7 +45,7 @@ import { getUserInfo, login } from '@/pages/utils/api.js'
 export default {
 	data() {
 		return {
-			title: '欢迎登录，慧穹智慧！',
+			title: '欢迎登录，慧穹智行伴侣！',
 			second: 60,
 			showText: true,
 			email: '',

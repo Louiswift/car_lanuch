@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="content">
 				<view class="contentWrap">
-					<img src="../../../static/email.png" alt="" />
+					<img src="@/static/email.png" alt="" />
 					<text>2392228720@qq.com</text>
 				</view>
 				<view class="btnWrap">

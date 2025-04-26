@@ -1,6 +1,9 @@
 <template>
 	<view style="">
 		<!-- 3D 模型区域 -->
+		<canvas id="container" type="webgl">
+			<model></model>
+		</canvas>
 
 		<!-- 车辆信息卡片区域 -->
 		<scroll-view class="card-container">
@@ -33,6 +36,8 @@
 </template>
 
 <script>
+import model from './index/model.vue';
+
 export default {
 	onTabItemTap(item) {
 		uni.$emit("tabChanged", item);
@@ -42,14 +47,22 @@ export default {
 		};
 	},
 	components: {
+		model
 	},
 	methods: {
+		
 	}
 };
 </script>
 
 <style lang="scss" scoped>
 /* 3D 模型区域的样式 */
+#container{
+	width: 100%;
+	height: 400px;
+	padding: 10px;
+	margin: 0 auto;
+}
 
 .text_my {
 	font-weight: bold;

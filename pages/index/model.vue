@@ -45,43 +45,49 @@ export default {
       controls.enableDamping = true;
       // 设置摄像机的最大距离，限制用户能够远离场景的最大距离
       controls.maxDistance = 5;
-      // 设置摄像机的最小缩放值，防止用户将场景放大得太小
+      // 设置摄像机的最小缩放值
       controls.minZoom = 1.5;
       controls.update();
 
-      //创建舞台（3D 世界）
+      //创建舞台
       scene = new THREE.Scene();
-      // 创建网格辅助工具
+      // 创建网格
       // const gridHelper = new THREE.GridHelper(100, 100);
       // scene.add(gridHelper);
-      // // 创建坐标轴辅助工具
+      // // 创建坐标
       // const axesHelper = new THREE.AxesHelper(5);
       // scene.add(axesHelper);
-      //创建时钟 用于控制画面渲染帧数
+      //创建时钟
       clock = new THREE.Clock();
 
       //监听鼠标移动事件
       container.addEventListener('mousemove', this.onMouseMove);
       //创建照明
       const rgbeLoader = new RGBELoader();
-      rgbeLoader.load("https://launcher-car-assets.vercel.app/static/zwartkops_curve_sunset_1k.hdr", function(r) {
+      rgbeLoader.load("./static/zwartkops_curve_sunset_1k.hdr", function (r) {
         r.mapping = THREE.EquirectangularReflectionMapping;
         scene.background = new THREE.Color(0xFFFFFF);
         scene.environment = r;
       });
 
-      let vm = this;
-      //加载模型
-      const loader = new GLTFLoader();
-      loader.load("https://launcher-car-assets.vercel.app/static/car2.glb", function(gltf) {
-        let position = new THREE.Vector2();
-        const models = gltf.scene;
-        models.position.set(-2, 0, 0);
-        scene.add(models);
-        //动画片段
-        //vm.open(gltf) //这里不能使用 this
-        vm.createGUI(gltf.scene, gltf.animations);
-      });
+WW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       // 设置渲染器的像素比，以适应设备的像素密度
       renderer.setPixelRatio(window.devicePixelRatio);
@@ -92,7 +98,7 @@ export default {
       container.appendChild(renderer.domElement);
       this.myrender();
     },
-    /*open(gltf) {
+    open(gltf) {
       mixer = new THREE.AnimationMixer(gltf.scene);
       //其中的一个动画片段
       const clip = gltf.animations[1];
@@ -102,7 +108,7 @@ export default {
       //只需要播放一次
       action.loop = THREE.LoopOnce;
       this.openDoor = action
-    },*/
+    },
     onMouseMove() {
       //初始化鼠标向量 加法、减法、标量乘法、点积、叉积等
       mouse = new THREE.Vector2(1, 1);
@@ -188,7 +194,7 @@ export default {
       let previousAction = activeAction;
       activeAction = actions[data];
       if (previousAction) {
-        if (previousAction!== activeAction) {
+        if (previousAction !== activeAction) {
           previousAction.setEffectiveWeight(0);
           previousAction.setEffectiveWeight(1);
         }
@@ -218,5 +224,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

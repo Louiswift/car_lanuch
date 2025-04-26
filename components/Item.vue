@@ -5,7 +5,7 @@
 			<view class="numberWrap">
 				<text class="txt">{{ content }}</text>
 			</view>
-			<img src="https://launcher-car-assets.vercel.app/static/right.png" class="rightIcon" alt="" srcset="" />
+			<img src="@/static/right.png" class="rightIcon" alt="" srcset="" />
 		</view>
 	</view>
 </template>

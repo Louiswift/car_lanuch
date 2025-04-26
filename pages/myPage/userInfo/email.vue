@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="content">
 				<view class="contentWrap">
-					<img src="../../../static/email.png" alt="" />
+					<img src="@/static/email.png" alt="" />
 					<text>{{ userInfo.email }}</text>
 				</view>
 				<view class="btnWrap">

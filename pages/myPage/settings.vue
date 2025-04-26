@@ -8,7 +8,7 @@
 			<view class="wrap">
 				<view class="options">
 					<Item text="个人资料" :fuc="goToUserInfo" />
-					<Item text="邮箱" type="text" :fuc="goToEmail" :content="userInfo.email" />
+					<Item text="邮箱" type="text" :fuc="goToEmail" :content="maskedEmail" />
 				</view>
 
 				<view class="options">
@@ -45,6 +45,14 @@ export default {
 		maskedPhoneNumber() {
 			return this.phoneNumber.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
 		},
+		maskedEmail() {
+			const email = this.userInfo.email;
+			// 用正则匹配邮箱中的数字部分
+			// 这里假设只替换第一个连续数字串的中间四位
+			return email.replace(/(\d{2})\d{4}(\d+)/, (match, p1, p2) => {
+				return p1 + '****' + p2;
+			});
+		}
 	},
 	onReady() {
 		const systemInfo = uni.getSystemInfoSync();

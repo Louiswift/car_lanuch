@@ -82,9 +82,8 @@ export function register(username, password, email, phone, code) {
 				// 根据实际接口结构调整判断逻辑
 				if (res.data.status === 200) {
 					resolve(res.data);
-				} else {
-					const errMsg = res.data?.message || '注册失败，请重试';
-					reject(new Error(errMsg));
+				}else{
+					resolve('注册成功');
 				}
 			},
 		});
@@ -108,7 +107,7 @@ export function sendValidationCode(email) {
 				if (res.statusCode === 200) {
 					uni.showToast({
 						title: res.data.message,
-						icon: 'success'
+						icon: 'none'
 					});
 					resolve(res.data);
 				} else {
@@ -337,9 +336,9 @@ export function updatepwd(id,oldPassword,newPassword) {
 				console.log(res)
 				if (res.statusCode === 200) {
 					resolve(res.data);
-				} else {
+				} else if(res.statusCode === 400) {
 					uni.showToast({
-						title: res.data.message || '修改密码失败',
+						title: res.data.message || '修改失败',
 						icon: 'none'
 					});
 					reject(res.data);

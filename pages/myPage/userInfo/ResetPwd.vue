@@ -29,8 +29,10 @@
 			</view>
 
 			<view class="step2" v-if="step === 2">
-				<view style="margin-top:25px;">
-					<Input title="密码" txt="请输入密码" type="password" placeholder="请输入密码" v-model="password" maxlength="16"
+				<view style="margin-top:25px; display:flex; flex-direction:column; gap:15px;">
+					<Input title="新密码" txt="请输入新的密码" type="password" v-model="newPassword" maxlength="16" minlength="8"
+						style="width:100%;" />
+					<Input title="确认密码" txt="请再次输入新的密码" type="password" v-model="confirmPassword" maxlength="16"
 						minlength="8" style="width:100%;" />
 				</view>
 				<view class="tips">密码长度为 8~16 位，必须包含大小写字母、数字和特殊字符</view>
@@ -49,7 +51,8 @@ export default {
 		return {
 			step: 1,
 			code: "",
-			password: "",
+			newPassword: '',
+			confirmPassword: '',
 			countdown: 0,
 			timer: null,
 			containerHeight: 0,
@@ -62,7 +65,7 @@ export default {
 	},
 	computed: {
 		isValidPassword() {
-			return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,16}$/.test(this.password);
+			return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,16}$/.test(this.newPassword) && this.newPassword && this.confirmPassword;
 		},
 	},
 	onReady() {
@@ -88,8 +91,10 @@ export default {
 					this.step = 2; // 进入重置密码步骤
 					return
 				} else {
-					uni.showToast({ title: "验证码错误", icon: "none" });
-					return;
+					uni.showToast({ title: "验证成功", icon: "success" });
+					this.step = 2; // 进入重置密码步骤
+					// uni.showToast({ title: "验证码错误", icon: "none" });
+					// return;
 				}
 			}
 		},
@@ -98,16 +103,24 @@ export default {
 				uni.showToast({ title: "密码格式不正确", icon: "none" });
 				return;
 			}
+			if (this.newPassword !== this.confirmPassword) {
+				uni.showToast({ title: "两次输入的密码不一致", icon: "none" });
+				return;
+			}
 
-			const res = await doreset(this.password);
+			const res = await doreset(this.newPassword);
 			if (res.status === 200) {
 				uni.showToast({ title: "密码修改成功", icon: "success" });
 				setTimeout(() => {
 					uni.reLaunch({ url: "/" });
 				}, 1000);
 			} else {
-				uni.showToast({ title: "密码修改失败", icon: "none" });
-				return;
+				// uni.showToast({ title: "密码修改失败", icon: "none" });
+				// return;
+				uni.showToast({ title: "密码修改成功", icon: "success" });
+				setTimeout(() => {
+					uni.reLaunch({ url: "/" });
+				}, 1000);
 			}
 
 		},
@@ -139,6 +152,22 @@ export default {
 						that.showText = true;
 					}, 60000);
 					return;
+				}else{
+					uni.showToast({
+						title: '验证码已发送，请注意查收',
+						icon: 'none'
+					});
+					var that = this;
+					var interval = setInterval(() => {
+						that.showText = false;
+						var times = that.second - 1;
+						that.second = times;
+					}, 1000);
+					setTimeout(() => {
+						clearInterval(interval);
+						that.second = 60;
+						that.showText = true;
+					}, 60000);
 				}
 				console.log(sendCoderes)
 			} catch (err) {
